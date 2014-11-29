@@ -7,12 +7,11 @@ import com.baidu.location.BDLocation;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISTiledMapServiceLayer;
-import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
-import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.PictureMarkerSymbol;
 
+import dev.arcgis.buu.utils.CalculateUtils;
 import dev.arcgis.buu.utils.L;
 
 import java.util.Timer;
@@ -20,10 +19,11 @@ import java.util.TimerTask;
 
 public class ArcGISProjectActivity extends Activity {
 
-    MapView mMapView;
-    GraphicsLayer mLayerGps;
-    PictureMarkerSymbol locationSymbol;
-    Timer mGetLocationTimer;
+    private MapView mMapView;
+    private GraphicsLayer mLayerGps;
+    private PictureMarkerSymbol locationSymbol;
+    private Timer mGetLocationTimer;
+    private boolean getLocationFirstTime = true;
 
     /** Called when the activity is first created. */
     @Override
@@ -77,10 +77,9 @@ public class ArcGISProjectActivity extends Activity {
         mLayerGps.removeAll();
         final double locx = location.getLongitude();
         final double locy = location.getLatitude();
-        final Point wgspoint = new Point(locx, locy);
-        final Point mapPoint =
-                (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mMapView.getSpatialReference());
-        L.i(ArcGISProjectActivity.class, "wgspoint: " + wgspoint);
+        final Point gpsPoint = new Point(locx, locy);
+        final Point mapPoint = CalculateUtils.getMapPointFromGPSPoint(gpsPoint, mMapView.getSpatialReference());
+        L.i(ArcGISProjectActivity.class, "gpsPoint: " + gpsPoint);
         L.i(ArcGISProjectActivity.class, "mapPoint: " + mapPoint);
 
         //图层的创建
@@ -99,6 +98,10 @@ public class ArcGISProjectActivity extends Activity {
           poly.lineTo(mapPoint.getX(), mapPoint.getY());
           mLayerGps.addGraphic(new Graphic(poly, new SimpleLineSymbol(Color.BLACK, 2)));*/
         mMapView.centerAt(mapPoint, true);
+        if (getLocationFirstTime) {
+            mMapView.setScale(100000, true);
+            getLocationFirstTime = false;
+        }
     }
 
 }
