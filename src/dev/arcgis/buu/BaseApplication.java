@@ -10,6 +10,8 @@
 
 package dev.arcgis.buu;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Application;
 import android.content.Context;
 
@@ -20,6 +22,8 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 import dev.arcgis.buu.utils.L;
+
+import java.util.List;
 
 /**
  * Application类：程序入口
@@ -33,9 +37,11 @@ public class BaseApplication extends Application {
 
     @Override
     public void onCreate() {
-        // TODO Auto-generated method stub
         super.onCreate();
         inst = this;
+        if (!isPrimaryProcess()) {
+            return;
+        }
         initBaiduGeo(inst);
     }
 
@@ -66,5 +72,21 @@ public class BaseApplication extends Application {
 
     public static BDLocation getCurrentLocation() {
         return currentLocation;
+    }
+
+    /**
+     * 检查当前进程是否为主进程（因baidu location service是remote进程，同样会初始化Application）
+     */
+    private boolean isPrimaryProcess() {
+        final ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        final List<RunningAppProcessInfo> processInfoList = am.getRunningAppProcesses();
+        final String primaryProcessName = getPackageName();
+        final int myPid = android.os.Process.myPid();
+        for (final RunningAppProcessInfo info : processInfoList) {
+            if (info.pid == myPid && primaryProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
