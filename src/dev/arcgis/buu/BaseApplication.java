@@ -21,6 +21,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
+import dev.arcgis.buu.utils.Constants;
 import dev.arcgis.buu.utils.L;
 
 import java.util.List;
@@ -45,6 +46,10 @@ public class BaseApplication extends Application {
         initBaiduGeo(inst);
     }
 
+    public static BaseApplication getInstance() {
+        return inst;
+    }
+
     private static void initBaiduGeo(final Context context) {
         locationClient = new LocationClient(context.getApplicationContext());
         locationClient.registerLocationListener(new BDLocationListener() {
@@ -64,7 +69,7 @@ public class BaseApplication extends Application {
         final LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationMode.Hight_Accuracy);
         option.setCoorType("gcj02");
-        option.setScanSpan(10000); //每10秒更新一次位置信息
+        option.setScanSpan(Constants.kGetGPSLoopTime * 1000); //更新位置信息的时间间隔
         option.setIsNeedAddress(true);
         locationClient.setLocOption(option);
         locationClient.start();

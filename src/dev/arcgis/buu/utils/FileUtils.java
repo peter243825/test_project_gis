@@ -34,10 +34,11 @@ public class FileUtils {
     /**
      * 根据当前时间生成数据文件夹中的文件名
      */
-    public static String generateDataFileName(final Context context) {
+    public static String generateDataFileName(final Context context, final String fileNameSuffix) {
         final DateTime dateTime = new DateTime(DateTimeZone.getDefault());
         final DateTimeFormatter formatter = DateTimeFormat.forPattern(kFileNamePattern);
-        return context.getDir(kDataFolderName, Context.MODE_PRIVATE) + formatter.print(dateTime) + ".dat";
+        return context.getDir(kDataFolderName, Context.MODE_PRIVATE) + formatter.print(dateTime) + "_" + fileNameSuffix
+               + ".dat";
     }
 
     /**

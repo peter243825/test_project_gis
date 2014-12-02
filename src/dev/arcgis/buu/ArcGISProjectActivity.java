@@ -12,6 +12,7 @@ import com.esri.core.map.Graphic;
 import com.esri.core.symbol.PictureMarkerSymbol;
 
 import dev.arcgis.buu.utils.CalculateUtils;
+import dev.arcgis.buu.utils.Constants;
 import dev.arcgis.buu.utils.L;
 
 import java.util.Timer;
@@ -45,7 +46,7 @@ public class ArcGISProjectActivity extends Activity {
             public void run() {
                 markLocation(BaseApplication.getCurrentLocation());
             }
-        }, 10 * 1000, 10 * 1000);
+        }, Constants.kRefreshMapTime * 1000, Constants.kRefreshMapTime * 1000);
     }
 
     @Override
