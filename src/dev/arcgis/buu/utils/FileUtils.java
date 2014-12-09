@@ -141,4 +141,23 @@ public class FileUtils {
         L.i(FileUtils.class, "read successfully: " + fileName);
         return data.toString();
     }
+
+    /**
+     * 获得文件的长度
+     */
+    public static long getFileLength(final String fileName) {
+        final File file = new File(fileName);
+        if (!file.exists()) {
+            L.e(FileUtils.class, "file not exists: " + fileName);
+            return -1;
+        }
+        return file.length();
+    }
+
+    public static void deleteFile(final String fileName) {
+        final File file = new File(fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 }

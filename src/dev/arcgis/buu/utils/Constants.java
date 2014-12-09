@@ -18,4 +18,7 @@ public class Constants {
     public static final int kRefreshMapTime = 10; //地图刷新间隔
 
     public static final int kMaxRecordCount = 1000; //在内存中的最多记录条数
+
+    public static final String kServerAddress = "127.0.0.1"; //服务器地址
+    public static final int kServerPort = 8008; //服务器端口
 }
