@@ -48,6 +48,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="dev.arcgis.buu.receiver.NetChangeReceiver">
+             <intent-filter>
+                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+             </intent-filter>
+ 		</receiver>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="d7EpYux3lSnmg56XYd8oqQ5d" />

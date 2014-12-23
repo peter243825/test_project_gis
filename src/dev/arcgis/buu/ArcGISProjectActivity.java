@@ -8,6 +8,7 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISTiledMapServiceLayer;
 import com.esri.core.geometry.Point;
+import com.esri.core.geometry.Polyline;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.PictureMarkerSymbol;
 
@@ -24,6 +25,8 @@ public class ArcGISProjectActivity extends Activity {
     private GraphicsLayer mLayerGps;
     private PictureMarkerSymbol locationSymbol;
     private Timer mGetLocationTimer;
+    private Point mStartPoint;
+    private Polyline mPoly;
     private boolean getLocationFirstTime = true;
 
     /** Called when the activity is first created. */
@@ -86,18 +89,19 @@ public class ArcGISProjectActivity extends Activity {
         //图层的创建
         final Graphic graphicPoint = new Graphic(mapPoint, locationSymbol);
         mLayerGps.addGraphic(graphicPoint);
-        /*划线
-        if (startPoint == null) {
-          poly=new Polyline();
-          startPoint = mapPoint;
-          poly.startPath((float) startPoint.getX(),
-              (float) startPoint.getY());
-          Graphic graphicLine = new Graphic(startPoint,new SimpleLineSymbol(Color.RED,2));
-          gLayerGps.addGraphic(graphicLine);
+        /*
+        //划线
+        if (mStartPoint == null) {
+            mPoly = new Polyline();
+            mStartPoint = mapPoint;
+            mPoly.startPath((float) mStartPoint.getX(), (float) mStartPoint.getY());
+            final Graphic graphicLine = new Graphic(mStartPoint, new SimpleLineSymbol(Color.RED, 2));
+            mLayerGps.addGraphic(graphicLine);
         }
-          final Polyline poly = new Polyline();
-          poly.lineTo(mapPoint.getX(), mapPoint.getY());
-          mLayerGps.addGraphic(new Graphic(poly, new SimpleLineSymbol(Color.BLACK, 2)));*/
+        mPoly.lineTo(mapPoint.getX(), mapPoint.getY());
+        mLayerGps.addGraphic(new Graphic(mPoly, new SimpleLineSymbol(Color.BLACK, 2)));
+        */
+        //将中心点定位至当前坐标
         mMapView.centerAt(mapPoint, true);
         if (getLocationFirstTime) {
             mMapView.setScale(100000, true);

@@ -30,7 +30,7 @@ import java.util.TreeMap;
  */
 public class SenserRecord implements Serializable {
     private static final long serialVersionUID = 2055765895260925417L;
-    private static final String kTimePattern = "HH:mm:ss.ms";
+    private static final String kTimePattern = "yyyy-MM-dd HH:mm:ss.ms";
 
     private String senserName;
     private TreeMap<DateTime, float[]> record;
@@ -61,7 +61,7 @@ public class SenserRecord implements Serializable {
         addRecord(currentTime, recordItem);
     }
 
-    public void addRecord(final DateTime time, final float[] recordItem) {
+    synchronized public void addRecord(final DateTime time, final float[] recordItem) {
         record.put(time, recordItem);
         if (record.size() >= Constants.kMaxRecordCount) {
             dump();
